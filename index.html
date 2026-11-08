@@ -81,6 +81,43 @@
       100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
     }
 
+    /* Кнопка музыкального плеера */
+    .music-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1500;
+      background: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      transition: all 0.3s ease;
+      font-size: 1.3rem;
+    }
+
+    .music-btn:hover {
+      transform: scale(1.1);
+      background: rgba(255, 255, 255, 0.7);
+    }
+
+    .music-btn.playing {
+      animation: pulseMusic 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseMusic {
+      0% { box-shadow: 0 0 0 0 rgba(199, 21, 133, 0.5); }
+      70% { box-shadow: 0 0 0 15px rgba(199, 21, 133, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(199, 21, 133, 0); }
+    }
+
     .slider-container {
       position: relative;
       width: 100vw;
@@ -339,6 +376,10 @@
 <body>
 
   <div class="background"></div>
+
+  <!-- Аудио Плеер -->
+  <audio id="bg-music" loop src="music.mp3"></audio>
+  <button class="music-btn" id="music-toggle" onclick="toggleMusic()" title="Музыка">🎵</button>
 
   <div class="donut-container" id="donut-container"></div>
   <div class="bubble-container" id="bubble-container"></div>
@@ -608,7 +649,7 @@
             <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_0324_b461e4.jpeg" alt="Рим 5"></div>
             <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_6441_b461e4.jpg" alt="Рим 6"></div>
             <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_6511_b461e4.jpg" alt="Рим 7"></div>
-            <div class="photo-card" onclick="openModal(this)"><img src="IMG_6495_b461e4.jpg" alt="Рим 8"></div>
+            <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_6495_b461e4.jpg" alt="Рим 8"></div>
             <!-- Дублирование для бесконечной ленты -->
             <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_6408_b461e4.jpg" alt="Рим 1"></div>
             <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_4387_b461e4.jpg" alt="Рим 2"></div>
@@ -617,7 +658,7 @@
             <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_0324_b461e4.jpeg" alt="Рим 5"></div>
             <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_6441_b461e4.jpg" alt="Рим 6"></div>
             <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_6511_b461e4.jpg" alt="Рим 7"></div>
-            <div class="photo-card" onclick="openModal(this)"><img src="IMG_6495_b461e4.jpg" alt="Рим 8"></div>
+            <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_6495_b461e4.jpg" alt="Рим 8"></div>
           </div>
         </div>
         <p class="description">
@@ -654,11 +695,38 @@
   </div>
 
   <script>
+    let hasPlayedMusic = false;
+
     window.addEventListener('DOMContentLoaded', () => {
       initDonuts();
       initBubbles();
       initSnow();
     });
+
+    function playMusic() {
+      const audio = document.getElementById('bg-music');
+      const btn = document.getElementById('music-toggle');
+      audio.play().then(() => {
+        btn.classList.add('playing');
+        btn.innerText = '🎵';
+      }).catch(err => {
+        console.log('Автозапуск заблокирован:', err);
+      });
+    }
+
+    function toggleMusic() {
+      const audio = document.getElementById('bg-music');
+      const btn = document.getElementById('music-toggle');
+      if (audio.paused) {
+        audio.play();
+        btn.classList.add('playing');
+        btn.innerText = '🎵';
+      } else {
+        audio.pause();
+        btn.classList.remove('playing');
+        btn.innerText = '🔇';
+      }
+    }
 
     function initDonuts() {
       const container = document.getElementById('donut-container');
@@ -701,6 +769,12 @@
     }
 
     function changeSlide(slideIndex) {
+      // Запуск музыки при первом клике на кнопки переключения
+      if (!hasPlayedMusic) {
+        playMusic();
+        hasPlayedMusic = true;
+      }
+
       const slides = document.querySelectorAll('.slide');
       slides.forEach(slide => slide.classList.remove('active'));
       
