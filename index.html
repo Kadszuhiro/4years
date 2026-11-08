@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Наши 4 года вместе ❤️</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      font-family: 'Montserrat', sans-serif;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: 
+        radial-gradient(circle at 10% 10%, rgba(200, 185, 235, 1) 0%, transparent 45%),
+        radial-gradient(circle at 90% 15%, rgba(175, 90, 215, 0.85) 0%, transparent 50%),
+        radial-gradient(circle at 80% 85%, rgba(240, 110, 100, 0.9) 0%, transparent 55%),
+        radial-gradient(circle at 20% 85%, rgba(250, 215, 120, 0.95) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(245, 170, 150, 0.85) 0%, transparent 60%);
+      background-color: #f7b094;
+      z-index: 1;
+    }
+
+    .donut-container, .bubble-container, .snow-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 500;
+      overflow: hidden;
+      display: none;
+    }
+
+    .donut-container.active, .bubble-container.active, .snow-container.active {
+      display: block;
+    }
+
+    .donut, .bubble {
+      position: absolute;
+      font-size: 2.5rem;
+      animation: floatEffect linear infinite;
+      text-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .snowflake {
+      position: absolute;
+      font-size: 2rem;
+      animation: fallSnow linear infinite;
+      text-shadow: 0 2px 10px rgba(255,255,255,0.8);
+    }
+
+    @keyframes floatEffect {
+      0% { transform: translateY(105vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.9; }
+      90% { opacity: 0.9; }
+      100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+    }
+
+    @keyframes fallSnow {
+      0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.95; }
+      90% { opacity: 0.95; }
+      100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
+    }
+
+    .slider-container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      z-index: 2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .slide {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      transform: scale(0.95);
+      padding: 30px;
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1);
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.35);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: 32px;
+      padding: 35px 45px;
+      max-width: 1100px;
+      width: 90%;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12), inset 0 1px 2px rgba(255, 255, 255, 0.8);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin-bottom: 20px;
+      max-height: 82vh;
+      overflow-y: auto;
+    }
+
+    .title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #2c1a30;
+      margin-bottom: 15px;
+      line-height: 1.2;
+      text-shadow: 0 2px 10px rgba(255,255,255,0.4);
+    }
+
+    .description {
+      font-size: 1.15rem;
+      font-weight: 500;
+      color: #3b2343;
+      line-height: 1.5;
+    }
+
+    .photo-grid {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .photo-grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      width: 100%;
+      margin-bottom: 20px;
+      align-items: center;
+    }
+
+    .photo-grid-5 {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .photo-grid-6 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      width: 100%;
+      margin-bottom: 20px;
+      align-items: center;
+    }
+
+    .carousel-track-container {
+      width: 100%;
+      overflow: hidden;
+      margin-bottom: 20px;
+      border-radius: 20px;
+      position: relative;
+      padding: 10px 0;
+    }
+
+    .carousel-track {
+      display: flex;
+      gap: 15px;
+      width: max-content;
+      animation: scrollHorizontal 25s linear infinite;
+    }
+
+    .carousel-track-container:hover .carousel-track {
+      animation-play-state: paused;
+    }
+
+    @keyframes scrollHorizontal {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .photo-card {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+      border: 3px solid rgba(255,255,255,0.8);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: rgba(255,255,255,0.2);
+      flex-shrink: 0;
+    }
+
+    .photo-card:hover {
+      transform: translateY(-5px) scale(1.03);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.25);
+    }
+
+    .photo-card img {
+      max-width: 100%;
+      max-height: 250px;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      display: block;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 15px;
+    }
+
+    .btn-next, .btn-prev {
+      border: none;
+      padding: 15px 35px;
+      font-size: 1.15rem;
+      font-weight: 600;
+      font-family: inherit;
+      border-radius: 50px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-next {
+      background: linear-gradient(135deg, #c71585 0%, #800020 100%);
+      color: #ffffff;
+      box-shadow: 0 10px 25px rgba(128, 0, 32, 0.4);
+    }
+
+    .btn-next:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 15px 32px rgba(128, 0, 32, 0.55);
+    }
+
+    .btn-prev {
+      background: rgba(255, 255, 255, 0.5);
+      color: #3b2343;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    .btn-prev:hover {
+      background: rgba(255, 255, 255, 0.8);
+      transform: translateY(-2px);
+    }
+
+    .btn-next svg, .btn-prev svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-img {
+      max-width: 90vw;
+      max-height: 90vh;
+      border-radius: 20px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      border: 4px solid rgba(255, 255, 255, 0.9);
+      transform: scale(0.8);
+      transition: transform 0.3s ease;
+      object-fit: contain;
+    }
+
+    .modal-overlay.active .modal-img {
+      transform: scale(1);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 25px;
+      right: 35px;
+      color: #fff;
+      font-size: 2.5rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="background"></div>
+
+  <div class="donut-container" id="donut-container"></div>
+  <div class="bubble-container" id="bubble-container"></div>
+  <div class="snow-container" id="snow-container"></div>
+
+  <div class="slider-container">
+    <!-- Слайд 1 -->
+    <div class="slide active" id="slide-1">
+      <div class="card">
+        <h1 class="title">Наши 4 Года Вместе</h1>
+        <p class="description">
+          Привет любимая❤️, сегодня наша 4 годовщина и так как я не могу быть с тобой в этот день я бы хотел тебя обрадовать таким маленьким подарком и вместе с тобой вспомнить то как прошли эти 4 года вместе
+        </p>
+      </div>
+      <button class="btn-next" onclick="changeSlide(2)">
+        Листай ❤️
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+
+    <!-- Слайд 2 -->
+    <div class="slide" id="slide-2">
+      <div class="card">
+        <h1 class="title">Давай вспомним начало с Хелоуина…</h1>
+        <div class="photo-grid">
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_1088_b637fb.jpg" alt="Фото 1"></div>
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_3794_b637fb.jpg" alt="Фото 2"></div>
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_1162_b637fb.jpg" alt="Фото 3"></div>
+        </div>
+        <p class="description">
+          тогда нас свел случай который мне казался ужасным но этот ужасный случай привнес мне в жизнь что-то прекрасное, а конкретно тебя…
+        </p>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn-prev" onclick="changeSlide(1)">← Назад</button>
+        <button class="btn-next" onclick="changeSlide(3)">
+          Листай ❤️
+          <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Слайд 3 -->
+    <div class="slide" id="slide-3">
+      <div class="card">
+        <h1 class="title">А вот несколько открыток которые ты делала для нас</h1>
+        <div class="photo-grid">
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/39CB613E-1AB3-4752-8EBD-0E15D03A5887_b5b0d4.jpeg" alt="Открытка 1"></div>
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_2071_b5b0d4.jpg" alt="Открытка 2"></div>
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_2072_b5b0d4.jpg" alt="Открытка 3"></div>
+        </div>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn-prev" onclick="changeSlide(2)">← Назад</button>
+        <button class="btn-next" onclick="changeSlide(4)">
+          Листай ❤️
+          <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Слайд 4 -->
+    <div class="slide" id="slide-4">
+      <div class="card">
+        <h1 class="title">Помнишь нашу первую совместную поездку?</h1>
+        <div class="photo-grid-6">
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_2615_b552ff.jpg" alt="Поездка 1"></div>
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_2623_b552ff.jpg" alt="Поездка 2"></div>
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_4816_b552ff.jpg" alt="Поездка 3"></div>
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_2670_b552ff.jpg" alt="Поездка 4"></div>
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_2662_b552ff.jpg" alt="Поездка 5"></div>
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_2615_b552ff.jpg" alt="Поездка 6"></div>
+        </div>
+        <p class="description">
+          тогда мне стало плохо из-за мороженого но тем неменее поездка была суперская и привнесла мне в жизнь новый опыт и город в котором я остался…
+        </p>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn-prev" onclick="changeSlide(3)">← Назад</button>
+        <button class="btn-next" onclick="changeSlide(5)">
+          Листай ❤️
+          <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Слайд 5 -->
+    <div class="slide" id="slide-5">
+      <div class="card">
+        <h1 class="title">Это наш первый день пончиков вместе</h1>
+        <div class="photo-grid">
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_3171_b5475a.jpg" alt="Пончики 1"></div>
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_3170_b5475a.jpg" alt="Пончики 2"></div>
+        </div>
+        <p class="description">
+          тогда мы знатно ими объелись и говорили что больше не будем так много есть но все равно каждый год продолжаем это делать…
+        </p>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn-prev" onclick="changeSlide(4)">← Назад</button>
+        <button class="btn-next" onclick="changeSlide(6)">
+          Листай ❤️
+          <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Слайд 6 -->
+    <div class="slide" id="slide-6">
+      <div class="card">
+        <h1 class="title">А это уже моё день рождение…</h1>
+        <div class="photo-grid-4">
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_4229_b53f41.jpg" alt="День рождения 1"></div>
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_4233_b53f41.jpeg" alt="День рождения 2"></div>
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_4234_b53f41.jpeg" alt="День рождения 3"></div>
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_4236_b53f41.jpg" alt="День рождения 4"></div>
+        </div>
+        <p class="description">
+          тогда было очень много людей, их было больше чем воспоминаний…
+        </p>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn-prev" onclick="changeSlide(5)">← Назад</button>
+        <button class="btn-next" onclick="changeSlide(7)">
+          Листай ❤️
+          <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Слайд 7 -->
+    <div class="slide" id="slide-7">
+      <div class="card">
+        <h1 class="title">А это уже поездка с твоей мамой и братом…</h1>
+        <div class="photo-grid">
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_4341_b53439.jpg" alt="Поездка 1"></div>
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_4298_b53439.jpg" alt="Поездка 2"></div>
+        </div>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn-prev" onclick="changeSlide(6)">← Назад</button>
+        <button class="btn-next" onclick="changeSlide(8)">
+          Листай ❤️
+          <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Слайд 8 -->
+    <div class="slide" id="slide-8">
+      <div class="card">
+        <h1 class="title">Это первая поездка в бассейн вместе…</h1>
+        <div class="photo-grid">
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_4863_b5303b.jpg" alt="Бассейн 1"></div>
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_4872_b5303b.jpg" alt="Бассейн 2"></div>
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_4895_b5303b.jpg" alt="Бассейн 3"></div>
+        </div>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn-prev" onclick="changeSlide(7)">← Назад</button>
+        <button class="btn-next" onclick="changeSlide(9)">
+          Листай ❤️
+          <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Слайд 9 -->
+    <div class="slide" id="slide-9">
+      <div class="card">
+        <h1 class="title">А тут мы решились завести домашнего питомца…</h1>
+        <div class="photo-grid-5">
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_5689_b4d2a1.jpg" alt="Миди 1"></div>
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_5694_b4d2a1.jpg" alt="Миди 2"></div>
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_0610_b4d2a1.jpeg" alt="Миди 3"></div>
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_1046_b4d2a1.jpg" alt="Миди 4"></div>
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_1057_b4d2a1.jpg" alt="Миди 5"></div>
+        </div>
+        <p class="description">
+          мы оба все ещё скучаем за Миди…
+        </p>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn-prev" onclick="changeSlide(8)">← Назад</button>
+        <button class="btn-next" onclick="changeSlide(10)">
+          Листай ❤️
+          <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Слайд 10 -->
+    <div class="slide" id="slide-10">
+      <div class="card">
+        <h1 class="title">А вот и выпуск со школы…</h1>
+        <div class="photo-grid-4">
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_1708_b4c7fa.jpg" alt="Выпуск 1"></div>
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_1717_b4c7fa.jpg" alt="Выпуск 2"></div>
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_1735_b4c7fa.jpg" alt="Выпуск 3"></div>
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_1746_b4c7fa.jpg" alt="Выпуск 4"></div>
+        </div>
+        <p class="description">
+          моя прическа оставляет желать лучшего в тот день…
+        </p>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn-prev" onclick="changeSlide(9)">← Назад</button>
+        <button class="btn-next" onclick="changeSlide(11)">
+          Листай ❤️
+          <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Слайд 11 -->
+    <div class="slide" id="slide-11">
+      <div class="card">
+        <h1 class="title">Вот мы и подошли к нашему первому совместному концерту…</h1>
+        <div class="photo-grid-6">
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_1034_b4bf9b.jpg" alt="Концерт 1"></div>
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_2529_b4bf9b.jpg" alt="Концерт 2"></div>
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_2477_b4bf9b.jpg" alt="Концерт 3"></div>
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_2450_b4bf9b.jpg" alt="Концерт 4"></div>
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_0708_b4bf9b.jpg" alt="Концерт 5"></div>
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_1217_b4bf9b.jpg" alt="Концерт 6"></div>
+        </div>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn-prev" onclick="changeSlide(10)">← Назад</button>
+        <button class="btn-next" onclick="changeSlide(12)">
+          Листай ❤️
+          <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Слайд 12 -->
+    <div class="slide" id="slide-12">
+      <div class="card">
+        <h1 class="title">Это Новый год который мы впервые праздновали только вдвоём…</h1>
+        <div class="photo-grid-4">
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_5129_b46a1f.jpg" alt="Новый год 1"></div>
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_5128_b46a1f.jpg" alt="Новый год 2"></div>
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_5118_b46a1f.jpg" alt="Новый год 3"></div>
+          <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_5115_b46a1f.jpg" alt="Новый год 4"></div>
+        </div>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn-prev" onclick="changeSlide(11)">← Назад</button>
+        <button class="btn-next" onclick="changeSlide(13)">
+          Листай ❤️
+          <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Слайд 13 -->
+    <div class="slide" id="slide-13">
+      <div class="card">
+        <h1 class="title">А вот и первая поездка за границу вместе…</h1>
+        <div class="carousel-track-container">
+          <div class="carousel-track">
+            <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_6408_b461e4.jpg" alt="Рим 1"></div>
+            <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_4387_b461e4.jpg" alt="Рим 2"></div>
+            <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_4484_b461e4.jpg" alt="Рим 3"></div>
+            <div class="photo-card" onclick="openModal(this)"><img src="фото/camphoto_1439516116_b461e4.jpg" alt="Рим 4"></div>
+            <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_0324_b461e4.jpeg" alt="Рим 5"></div>
+            <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_6441_b461e4.jpg" alt="Рим 6"></div>
+            <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_6511_b461e4.jpg" alt="Рим 7"></div>
+            <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_6495_b461e4.jpg" alt="Рим 8"></div>
+            <!-- Дублирование для бесконечной ленты -->
+            <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_6408_b461e4.jpg" alt="Рим 1"></div>
+            <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_4387_b461e4.jpg" alt="Рим 2"></div>
+            <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_4484_b461e4.jpg" alt="Рим 3"></div>
+            <div class="photo-card" onclick="openModal(this)"><img src="фото/camphoto_1439516116_b461e4.jpg" alt="Рим 4"></div>
+            <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_0324_b461e4.jpeg" alt="Рим 5"></div>
+            <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_6441_b461e4.jpg" alt="Рим 6"></div>
+            <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_6511_b461e4.jpg" alt="Рим 7"></div>
+            <div class="photo-card" onclick="openModal(this)"><img src="фото/IMG_6495_b461e4.jpg" alt="Рим 8"></div>
+          </div>
+        </div>
+        <p class="description">
+          город в который мы поехали остался у меня в сердце навсегда…
+        </p>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn-prev" onclick="changeSlide(12)">← Назад</button>
+        <button class="btn-next" onclick="changeSlide(14)">
+          Листай ❤️
+          <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Слайд 14 -->
+    <div class="slide" id="slide-14">
+      <div class="card">
+        <h1 class="title">Конец?</h1>
+        <p class="description">
+          Вот мои фотографии и подошли к концу но воспоминания нет.<br><br>
+          Эти 4 года были просто суперскими не смотра на все наши ссоры и недопонимания мы все равно остаемся вместе и это главное, спасибо тебе за все и на поселок я хочу еще раз сказать что Я Люблю Тебя ❤️
+        </p>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn-prev" onclick="changeSlide(13)">← Назад</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal" onclick="closeModal()">
+    <span class="modal-close">&times;</span>
+    <img class="modal-img" id="modal-img" src="" alt="Увеличенное фото">
+  </div>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      initDonuts();
+      initBubbles();
+      initSnow();
+    });
+
+    function initDonuts() {
+      const container = document.getElementById('donut-container');
+      for (let i = 0; i < 20; i++) {
+        const d = document.createElement('div');
+        d.className = 'donut';
+        d.innerText = '🍩';
+        d.style.left = Math.random() * 95 + 'vw';
+        d.style.animationDuration = (Math.random() * 3 + 3) + 's';
+        d.style.animationDelay = (Math.random() * 3) + 's';
+        container.appendChild(d);
+      }
+    }
+
+    function initBubbles() {
+      const container = document.getElementById('bubble-container');
+      for (let i = 0; i < 20; i++) {
+        const b = document.createElement('div');
+        b.className = 'bubble';
+        b.innerText = '🫧';
+        b.style.left = Math.random() * 95 + 'vw';
+        b.style.animationDuration = (Math.random() * 3 + 3) + 's';
+        b.style.animationDelay = (Math.random() * 3) + 's';
+        container.appendChild(b);
+      }
+    }
+
+    function initSnow() {
+      const container = document.getElementById('snow-container');
+      for (let i = 0; i < 22; i++) {
+        const s = document.createElement('div');
+        s.className = 'snowflake';
+        s.innerText = '❄️';
+        s.style.left = Math.random() * 95 + 'vw';
+        s.style.animationDuration = (Math.random() * 4 + 4) + 's';
+        s.style.animationDelay = (Math.random() * 3) + 's';
+        s.style.fontSize = (Math.random() * 1.2 + 1.5) + 'rem';
+        container.appendChild(s);
+      }
+    }
+
+    function changeSlide(slideIndex) {
+      const slides = document.querySelectorAll('.slide');
+      slides.forEach(slide => slide.classList.remove('active'));
+      
+      const targetSlide = document.getElementById(`slide-${slideIndex}`);
+      if (targetSlide) {
+        targetSlide.classList.add('active');
+      }
+
+      const donutContainer = document.getElementById('donut-container');
+      if (slideIndex === 5) {
+        donutContainer.classList.add('active');
+      } else {
+        donutContainer.classList.remove('active');
+      }
+
+      const bubbleContainer = document.getElementById('bubble-container');
+      if (slideIndex === 8) {
+        bubbleContainer.classList.add('active');
+      } else {
+        bubbleContainer.classList.remove('active');
+      }
+
+      const snowContainer = document.getElementById('snow-container');
+      if (slideIndex === 12) {
+        snowContainer.classList.add('active');
+      } else {
+        snowContainer.classList.remove('active');
+      }
+    }
+
+    function openModal(cardElement) {
+      const img = cardElement.querySelector('img');
+      const modal = document.getElementById('modal');
+      const modalImg = document.getElementById('modal-img');
+      if (img && img.src) {
+        modalImg.src = img.src;
+        modal.classList.add('active');
+      }
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('modal');
+      modal.classList.remove('active');
+    }
+  </script>
+</body>
+</html>
